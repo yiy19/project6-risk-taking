@@ -1,0 +1,11 @@
+---
+title: "Project 6 - Risk-Taking Decisions"
+author: "Ye Dam Yi"
+date: "3/30/2021"
+output: html_document
+---
+
+```{r import-data}
+
+```
+
