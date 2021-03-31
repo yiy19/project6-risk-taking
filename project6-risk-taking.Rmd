@@ -96,7 +96,7 @@ t_self_other
 The plot and the inferential test show that people take more risk for others (M = 2.83) than for themselves (M = 2.14), p <.001. 
 
 
-### Does that trend differ for females vs. males?
+### Q2: Does that trend differ for females vs. males?
 
 ```{r self-other-gender}
 # check gender levels
@@ -153,9 +153,70 @@ t_self_other_gen
 The plot seems that males and females have different patterns of risk-taking for self and others but the inferential test showed that their pattern is about the same - both male and females take more risk take for others than for themselves, which is in line with the literature.
 
 
+### Q3: Do people in the control condition make more risk-taking decisions for others than for themselves to a greater extent than those in the emotion induction condition do?
+```{r control-induction-comparison}
+# create a condition label set
+condition_labels <- c(
+  '0' = "Control",
+  '1' = "Emotion Induction"
+)
+
+# plot
+risk2 %>% 
+  ggplot(aes(y = risktaking, color = recipient)) +
+  geom_boxplot() +
+  facet_wrap(~ experiencedemotions, labeller = as_labeller(condition_labels)) +
+  labs(
+    x = "Self vs. Other",
+    y = "Risk Taking Levels",
+    color = "Recipient"
+  ) +
+    scale_color_hue(labels = c("Self", "Other"))
 
 
-### Do people making decisions for others feel more or less negative emotions? Do negative emotions explain risk-taking levels? Do negative emotions influence decision making differently for personal decisions and for surrogate decisions?
+# look at descriptives
+risk2 %>% 
+  group_by(recipient, experiencedemotions) %>% 
+  summarize(mean = mean(risktaking),
+            sd = sd(risktaking),
+            min = min(risktaking),
+            max = max(risktaking),
+            median = median(risktaking))
+
+
+```
+
+There seems to be no qualitative difference between the control and emotion induction conditions in the extent to which people make different decisions for others than for themselves under risk. 
+
+
+
+### Q3: Do people making decisions for others feel more or less negative emotions? Do negative emotions explain risk-taking levels? Do negative emotions influence decision making differently for personal decisions and for surrogate decisions?
+```{r neg-emo}
+
+
+# plot the data
+risk2 %>% 
+  ggplot(aes(y = negfeel, color = recipient)) +
+  geom_boxplot() +
+  labs(
+    x = "Self vs. Other",
+    y = "Negative Emotion Ratings",
+    color = "Recipient"
+  ) +
+  scale_color_hue(labels = c("Self", "Other"))
+
+# get descriptives
+# look at descriptive info
+risk2 %>% 
+  select(negfeel, recipient) %>% 
+  group_by(recipient) %>% 
+  summarize(mean = mean(negfeel),
+            sd = sd(negfeel),
+            min = min(negfeel),
+            max = max(negfeel),
+            median = median(negfeel))
+
+```
 
 
 ### Do people making decisions for others feel more or less positive emotions? Do positive emotions explain risk-taking levels? Do positive emotions influence decision making differently for personal decisions and for surrogate decisions?
