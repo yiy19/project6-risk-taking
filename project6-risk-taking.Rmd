@@ -21,7 +21,7 @@ glimpse(risk)
 ```{r select-data}
 # drop some variables and convert column names into lowercase
 risk <- risk %>% 
-  select(-c("StartDate", "EndDate", "Finished")) %>%
+  select(-c("StartDate", "EndDate", "Finished", pagesubmitp:pagesubmit4, Gloomy:NYC)) %>%
   rename_with(tolower) %>% 
   mutate(gender = as.factor(gender))
 glimpse(risk)
