@@ -43,13 +43,39 @@ write_csv(risk, path = "data/risk.csv")
 ```
 
 
-### Do people more risk-taking decisions for others than for themselves?
+### Q1: Do people more risk-taking decisions for others than for themselves?
 ```{r risk-taking-self-other}
+# plot data
+risk %>% 
+  ggplot(aes(y = risktaking, color = recipient)) +
+  geom_boxplot() +
+  labs(
+    color = "Recipient",
+    y = "Risk Takng Levels",
+    x = "Self vs. Other"
+  ) + 
+  scale_color_hue(labels = c("Self", "Other"))
 
+# look at descriptive info
+risk %>% 
+  select("risktaking", "recipient") %>% 
+  group_by(recipient) %>% 
+  summarize(mean = mean(risktaking),
+            sd = sd(risktaking),
+            min = min(risktaking),
+            max = max(risktaking),
+            median = median(risktaking))
 
-
+# test this trend
+m_self_other <- lm(risktaking ~ recipient, risk)
+summary(m_self_other)
 
 ```
+
+The plot and the inferential test show that people take more risk for others (M = 2.83) than for themselves (M = 2.14), p <.001. 
+
+
+
 
 ### Does that trend differ for females vs. males?
 
