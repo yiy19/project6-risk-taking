@@ -7,8 +7,26 @@ output: html_document
 
 # Risk-Taking Decisions and Emotions
 
-```{r import-data}
+```{r load-libraries}
 
+library(tidyverse)
+
+```
+
+```{r read-data}
+# import data
+risk <- read_csv("/Users/yedam/Documents/Academic/WFU/Psychology/Projects/First Year Project/Main/Data/Data Files/clean data_excluded.csv", na = c("", "NA"))
+glimpse(risk)
+```
+```{r select-data}
+# drop some variables and convert column names into lowercase
+risk <- risk %>% 
+  select(-c("StartDate", "EndDate", "Finished")) %>% 
+  rename_with(tolower)
+glimpse(risk)
+
+# write data
+write_csv(risk, path = "data/risk.csv")
 ```
 
 
