@@ -8,8 +8,11 @@ output: html_document
 # Risk-Taking Decisions and Emotions
 
 ```{r load-libraries}
-
+#install.packages("labelled")
 library(tidyverse)
+library(labelled)
+library(ggpubr)
+library(rstatix)
 
 ```
 
@@ -33,8 +36,11 @@ nlevels(risk$experiencedemotions)
 nlevels(risk$condition)
 
 # convert into categorical variables
-risk <- risk %>% 
-  mutate(recipient = as.factor(recipient),
+risk2 <- risk %>% 
+  mutate(recipient <- labelled(recipient, c(Self = 0, Other = 1)),
+         gender <- labelled(gender, c(Male = 1, Female = 2)),
+         condition <- labelled(condition, c("Other Control" = 0, "Self Control" = 1, "Other Emotion" = 2, "Self Emotion" = 3)),
+    recipient = as.factor(recipient),
          experiencedemotions = as.factor(experiencedemotions),
          condition = as.factor(condition))
 
@@ -46,7 +52,7 @@ write_csv(risk, path = "data/risk.csv")
 ### Q1: Do people more risk-taking decisions for others than for themselves?
 ```{r risk-taking-self-other}
 # plot data
-risk %>% 
+risk2 %>% 
   ggplot(aes(y = risktaking, color = recipient)) +
   geom_boxplot() +
   labs(
@@ -55,9 +61,12 @@ risk %>%
     x = "Self vs. Other"
   ) + 
   scale_color_hue(labels = c("Self", "Other"))
+```
 
+
+```{r risk-taking-self-other-descr}
 # look at descriptive info
-risk %>% 
+risk2 %>% 
   select("risktaking", "recipient") %>% 
   group_by(recipient) %>% 
   summarize(mean = mean(risktaking),
@@ -66,18 +75,84 @@ risk %>%
             max = max(risktaking),
             median = median(risktaking))
 
-# test this trend
+# check normality assumption
+risk2 %>% 
+  group_by(recipient) %>% 
+  shapiro_test(risktaking)
+```
+
+```{r self-other-test}
+# test this trend - model
 m_self_other <- lm(risktaking ~ recipient, risk)
 summary(m_self_other)
+
+# test this trend - t test
+t_self_other <- risk2 %>% 
+  t_test(risktaking ~ recipient)
+t_self_other
 
 ```
 
 The plot and the inferential test show that people take more risk for others (M = 2.83) than for themselves (M = 2.14), p <.001. 
 
 
-
-
 ### Does that trend differ for females vs. males?
+
+```{r self-other-gender}
+# check gender levels
+levels(risk2$gender)
+
+# create gender labels
+gender_labels <- c(
+  '1' = "Male",
+  '2' = "Female"
+)
+
+# plot data
+risk2 %>% 
+  ggplot(aes(y = risktaking, color = recipient)) +
+  geom_boxplot() +
+  facet_wrap(~gender, labeller = as_labeller(gender_labels)) +
+  labs(
+    color = "Recipient",
+    y = "Risk Takng Levels",
+    x = "Self vs. Other"
+  ) + 
+  scale_color_hue(labels = c("Self", "Other"))
+
+# look at descriptive info
+risk2 %>% 
+  select(risktaking, recipient, gender) %>% 
+  group_by(recipient, gender) %>% 
+  summarize(mean = mean(risktaking),
+            sd = sd(risktaking),
+            min = min(risktaking),
+            max = max(risktaking),
+            median = median(risktaking))
+
+# check normality assumption
+risk2 %>% 
+  shapiro_test(risktaking)
+
+risk2 %>% group_by(gender) %>% 
+  shapiro_test(risktaking)
+
+```
+
+```{r self-other-gender-test}
+
+# test this trend - t test
+t_self_other_gen <- risk2 %>% 
+  group_by(gender) %>% 
+  t_test(risktaking ~ recipient)
+t_self_other_gen
+
+```
+
+
+The plot seems that males and females have different patterns of risk-taking for self and others but the inferential test showed that their pattern is about the same - both male and females take more risk take for others than for themselves, which is in line with the literature.
+
+
 
 
 ### Do people making decisions for others feel more or less negative emotions? Do negative emotions explain risk-taking levels? Do negative emotions influence decision making differently for personal decisions and for surrogate decisions?
