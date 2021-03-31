@@ -5,7 +5,28 @@ date: "3/30/2021"
 output: html_document
 ---
 
+# Risk-Taking Decisions and Emotions
+
 ```{r import-data}
 
 ```
+
+
+### Do people more risk-taking decisions for others than for themselves?
+
+
+### Does that trend differ for females vs. males?
+
+
+### Do people making decisions for others feel more or less negative emotions? Do negative emotions explain risk-taking levels? Do negative emotions influence decision making differently for personal decisions and for surrogate decisions?
+
+
+### Do people making decisions for others feel more or less positive emotions? Do positive emotions explain risk-taking levels? Do positive emotions influence decision making differently for personal decisions and for surrogate decisions?
+
+
+### What's the model of risk-taking levels? Is the effect of negative and positive emotions on risk-taking levels moderated by who is being decided for?
+
+
+
+
 
