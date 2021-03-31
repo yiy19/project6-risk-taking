@@ -237,8 +237,9 @@ risk &lt;- read_csv(&quot;/Users/yedam/Documents/Academic/WFU/Psychology/Project
 ## $ experiencedemotions_mc &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</code></pre>
 <pre class="r"><code># drop some variables and convert column names into lowercase
 risk &lt;- risk %&gt;% 
-  select(-c(&quot;StartDate&quot;, &quot;EndDate&quot;, &quot;Finished&quot;)) %&gt;% 
-  rename_with(tolower)
+  select(-c(&quot;StartDate&quot;, &quot;EndDate&quot;, &quot;Finished&quot;)) %&gt;%
+  rename_with(tolower) %&gt;% 
+  mutate(gender = as.factor(gender))
 glimpse(risk)</code></pre>
 <pre><code>## Rows: 1,418
 ## Columns: 36
@@ -251,7 +252,7 @@ glimpse(risk)</code></pre>
 ## $ pagesubmit4            &lt;dbl&gt; 59.255, 282.302, 131.928, 275.491, 102.875, 75.…
 ## $ submissiontime         &lt;dbl&gt; 416.110, 1263.830, 1141.430, 1633.595, 527.591,…
 ## $ agenum                 &lt;dbl&gt; 57, 23, 27, 25, 31, 38, 35, 38, 36, 38, 49, 33,…
-## $ gender                 &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ gender                 &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
 ## $ gencond                &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…
 ## $ condition              &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
 ## $ decision1              &lt;dbl&gt; 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0,…
@@ -278,7 +279,22 @@ glimpse(risk)</code></pre>
 ## $ zre_2                  &lt;dbl&gt; -0.69464666, 0.02702144, 1.23382867, 1.23382867…
 ## $ recipient_mc           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
 ## $ experiencedemotions_mc &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</code></pre>
-<pre class="r"><code># write data
+<pre class="r"><code># check factor levels - gender, recipient, experiencedemotions, condition
+nlevels(risk$gender)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>nlevels(risk$recipient)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>nlevels(risk$experiencedemotions)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>nlevels(risk$condition)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code># convert into categorical variables
+risk &lt;- risk %&gt;% 
+  mutate(recipient = as.factor(recipient),
+         experiencedemotions = as.factor(experiencedemotions),
+         condition = as.factor(condition))
+
+# write data
 write_csv(risk, path = &quot;data/risk.csv&quot;)</code></pre>
 <pre><code>## Warning: The `path` argument of `write_csv()` is deprecated as of readr 1.4.0.
 ## Please use the `file` argument instead.</code></pre>

@@ -21,9 +21,22 @@ glimpse(risk)
 ```{r select-data}
 # drop some variables and convert column names into lowercase
 risk <- risk %>% 
-  select(-c("StartDate", "EndDate", "Finished")) %>% 
-  rename_with(tolower)
+  select(-c("StartDate", "EndDate", "Finished")) %>%
+  rename_with(tolower) %>% 
+  mutate(gender = as.factor(gender))
 glimpse(risk)
+
+# check factor levels - gender, recipient, experiencedemotions, condition
+nlevels(risk$gender)
+nlevels(risk$recipient)
+nlevels(risk$experiencedemotions)
+nlevels(risk$condition)
+
+# convert into categorical variables
+risk <- risk %>% 
+  mutate(recipient = as.factor(recipient),
+         experiencedemotions = as.factor(experiencedemotions),
+         condition = as.factor(condition))
 
 # write data
 write_csv(risk, path = "data/risk.csv")
@@ -31,7 +44,12 @@ write_csv(risk, path = "data/risk.csv")
 
 
 ### Do people more risk-taking decisions for others than for themselves?
+```{r risk-taking-self-other}
 
+
+
+
+```
 
 ### Does that trend differ for females vs. males?
 
