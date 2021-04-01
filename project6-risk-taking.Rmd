@@ -267,12 +267,12 @@ People feel more positive emotions for others than for themselves when making de
 # plot the data - negfeel
 risk2 %>% 
   ggplot(aes(x = negfeel, color = recipient, y = risktaking)) +
-  geom_boxplot(aes(group = recipient)) + 
+  geom_boxplot() + 
   geom_jitter(color = "light grey") +
-  geom_smooth(aes(group = recipient), method = lm) +
+  geom_smooth(aes(group = recipient), method = "lm") +
   labs(
-    x = "Emotions",
-    y = "Negative Emotion Ratings",
+    x = "Negative Emotion",
+    y = "Risk Taking Levels",
     color = "Recipient"
   ) +
   scale_color_hue(labels = c("Self", "Other")) 
@@ -284,8 +284,8 @@ risk2 %>%
   geom_jitter(color = "light grey") +
   geom_smooth(aes(group = recipient), method = lm) +
   labs(
-    x = "Emotions",
-    y = "Positive Emotion Ratings",
+    x = "Positive Emotion",
+    y = "Risk Taking Levels",
     color = "Recipient"
   ) +
   scale_color_hue(labels = c("Self", "Other")) 
