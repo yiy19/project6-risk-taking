@@ -263,6 +263,55 @@ People feel more positive emotions for others than for themselves when making de
 ### Q6: Do emotions influence risk-taking levels differently for personal decisions and for surrogate decisions? Is the effect of negative and positive emotions on risk-taking levels moderated by who is being decided for?
 
 
+```{r risktaking-emotion}
+# plot the data - negfeel
+risk2 %>% 
+  ggplot(aes(x = negfeel, color = recipient, y = risktaking)) +
+  geom_boxplot(aes(group = recipient)) + 
+  geom_jitter(color = "light grey") +
+  geom_smooth(aes(group = recipient), method = lm) +
+  labs(
+    x = "Emotions",
+    y = "Negative Emotion Ratings",
+    color = "Recipient"
+  ) +
+  scale_color_hue(labels = c("Self", "Other")) 
+
+# plot the data - posfeel
+risk2 %>% 
+  ggplot(aes(x = posfeel, color = recipient, y = risktaking)) +
+  geom_boxplot(aes(group = recipient)) + 
+  geom_jitter(color = "light grey") +
+  geom_smooth(aes(group = recipient), method = lm) +
+  labs(
+    x = "Emotions",
+    y = "Positive Emotion Ratings",
+    color = "Recipient"
+  ) +
+  scale_color_hue(labels = c("Self", "Other")) 
+
+```
+
+
+It seems that the relationship between negative and positive emotions and risk-taking levels don't really differ across personal decisions and surrogate decisions. 
+
+
+### Thoughts 
+I'm not really sure why the data points look like they are in a grid pattern. I'm also not sure how to anchor the regression lines to each of the boxplots that they are relevant to, which is what Mason did in one of her graphs she shared with me and Eric. It looked really nice. 
+
+It was helpful to learn that there was a package called "rstatix" that allows piping with inferential statistics.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
