@@ -190,9 +190,8 @@ There seems to be no qualitative difference between the control and emotion indu
 
 
 
-### Q3: Do people making decisions for others feel more or less negative emotions? Do negative emotions explain risk-taking levels? Do negative emotions influence decision making differently for personal decisions and for surrogate decisions?
+### Q4: Do people making decisions for others feel more or less negative emotions? 
 ```{r neg-emo}
-
 
 # plot the data
 risk2 %>% 
@@ -216,13 +215,52 @@ risk2 %>%
             max = max(negfeel),
             median = median(negfeel))
 
+# test this trend - t test
+t_self_other_negfeel <- risk2 %>% 
+  t_test(negfeel ~ recipient)
+t_self_other_negfeel
+
+
+```
+People feel more negative emotions for themselves than for others when making decisions under risk.
+
+
+### Q5: Do people making decisions for others feel more or less positive emotions? 
+```{r pos-emo}
+# plot the data
+risk2 %>% 
+  ggplot(aes(y = posfeel, color = recipient)) +
+  geom_boxplot() +
+  labs(
+    x = "Self vs. Other",
+    y = "Positive Emotion Ratings",
+    color = "Recipient"
+  ) +
+  scale_color_hue(labels = c("Self", "Other"))
+
+# get descriptives
+# look at descriptive info
+risk2 %>% 
+  select(posfeel, recipient) %>% 
+  group_by(recipient) %>% 
+  summarize(mean = mean(posfeel),
+            sd = sd(posfeel),
+            min = min(posfeel),
+            max = max(posfeel),
+            median = median(posfeel))
+
+
+# test this trend - t test
+t_self_other_posfeel <- risk2 %>% 
+  t_test(posfeel ~ recipient)
+t_self_other_posfeel
 ```
 
+People feel more positive emotions for others than for themselves when making decisions under risk.
 
-### Do people making decisions for others feel more or less positive emotions? Do positive emotions explain risk-taking levels? Do positive emotions influence decision making differently for personal decisions and for surrogate decisions?
 
 
-### What's the model of risk-taking levels? Is the effect of negative and positive emotions on risk-taking levels moderated by who is being decided for?
+### Q6: Do emotions influence risk-taking levels differently for personal decisions and for surrogate decisions? Is the effect of negative and positive emotions on risk-taking levels moderated by who is being decided for?
 
 
 
